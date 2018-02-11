@@ -55,6 +55,7 @@ public:
         for(int i = 0; i < edges; i++)
         {
             int from = 0, to = 0;
+            cin >> from >> to;
             this -> AddEdge(from, to);
         }
     }
@@ -204,7 +205,7 @@ public:
 
     void AddVertex(void)
     {
-        number++; 
+        number++;
     }
 
     void swap(pair <int, int> &a, pair <int, int> &b)
