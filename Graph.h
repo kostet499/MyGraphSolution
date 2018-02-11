@@ -204,7 +204,7 @@ public:
 
     void AddVertex(void)
     {
-        number++;
+        number++; 
     }
 
     void swap(pair <int, int> &a, pair <int, int> &b)
