@@ -113,6 +113,15 @@ public:
         *this = CListGraph(Base->VerticesCount());
         copyGraph(this, Base);
     }
+
+    void AddVertex(void)
+    {
+        number++;
+        vector <int> ver;
+        graph.push_back(ver);
+        graphT.push_back(ver);
+    }
+
     void AddEdge(int from, int to) override
     {
         graph[from].push_back(to);
@@ -148,6 +157,15 @@ public:
         *this = CSetGraph(Base->VerticesCount());
         copyGraph(this, Base);
     }
+
+    void AddVertex(void)
+    {
+        number++;
+        set <int> ver;
+        graph.push_back(ver);
+        graphT.push_back(ver);
+    }
+
     void AddEdge(int from, int to) override
     {
         graph[from].insert(to);
@@ -183,6 +201,12 @@ public:
         *this = CArcGraph(Base->VerticesCount());
         copyGraph(this, Base);
     }
+
+    void AddVertex(void)
+    {
+        number++;
+    }
+
     void swap(pair <int, int> &a, pair <int, int> &b)
     {
         pair <int, int> temp = a;
