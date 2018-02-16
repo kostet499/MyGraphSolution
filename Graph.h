@@ -32,7 +32,7 @@ protected:
     int number = 0;
 public:
     GraphBase() = default;
-    virtual void copyGraph(IGraph *New, IGraph *Base)
+    const void copyGraph(IGraph *Base)
     {
         for(int i = 0; i < Base->VerticesCount(); i++)
         {
@@ -40,12 +40,12 @@ public:
             Base->GetNextVertices(i, vertices);
             for(int j = 0; j < vertices.size(); j++)
             {
-                New -> AddEdge(i, vertices[j]);
+                this -> AddEdge(i, vertices[j]);
             }
         }
     }
 
-    virtual int VerticesCount() override
+    int VerticesCount() override
     {
         return number;
     }
@@ -65,17 +65,15 @@ class CMatrixGraph: public GraphBase {
 private:
     vector <vector <bool> > graph;
 public:
-    CMatrixGraph(int size) {
-        this -> graph.resize(size);
-        for(int i = 0; i < size; i++)
-            graph[i].resize(size, false);
-        this -> number = size;
+    CMatrixGraph(int size)
+    {
+        initializeEmptyObject(size);
     }
+
     CMatrixGraph(IGraph *Base)
     {
-        // *this - очень важное место, так как без него объект, созданный в CListGraph удаляется(потрачено много времени на дебаг)
-        *this = CMatrixGraph(Base->VerticesCount());
-        copyGraph(this, Base);
+        initializeEmptyObject(Base -> VerticesCount());
+        copyGraph(Base);
     }
     // 1 в ячейке в строке from и столбце to означает существование ребра из вершины from в верщину to
     void AddEdge(int from, int to) override
@@ -97,22 +95,30 @@ public:
             if(graph[i][vertex])
                 vertices.push_back(i);
     }
+private:
+    void initializeEmptyObject(int size)
+    {
+        this -> graph.resize(size);
+        for(int i = 0; i < size; i++)
+            graph[i].resize(size, false);
+        this -> number = size;
+    }
+
 };
 
 class CListGraph: public GraphBase {
 private:
     vector <vector <int> > graph, graphT;
 public:
-    CListGraph(int size) {
-        this -> graph.resize(size);
-        this -> graphT.resize(size);
-        this -> number = size;
+    CListGraph(int size)
+    {
+        initializeEmptyObject(size);
     }
     CListGraph(IGraph *Base)
     {
         // *this - очень важное место, так как без него объект, созданный в CListGraph удаляется(потрачено много времени на дебаг)
-        *this = CListGraph(Base->VerticesCount());
-        copyGraph(this, Base);
+        initializeEmptyObject(Base->VerticesCount());
+        copyGraph(Base);
     }
 
     void AddVertex(void)
@@ -141,22 +147,35 @@ public:
         for(int i = 0; i < vertices.size(); i++)
             vertices[i] = graphT[vertex][i];
     }
+private:
+    void initializeEmptyObject(int size)
+    {
+        this -> graph.resize(size);
+        this -> graphT.resize(size);
+        this -> number = size;
+    }
 };
 
 class CSetGraph: public GraphBase {
 private:
     vector <set <int> > graph, graphT;
-public:
-    CSetGraph(int size) {
+
+    void initializeEmptyObject(int size)
+    {
         this -> graph.resize(size);
         this -> graphT.resize(size);
         this -> number = size;
     }
+public:
+    CSetGraph(int size)
+    {
+        initializeEmptyObject(size);
+    }
     CSetGraph(IGraph *Base)
     {
         // *this - очень важное место, так как без него объект, созданный в CListGraph удаляется(потрачено много времени на дебаг)
-        *this = CSetGraph(Base->VerticesCount());
-        copyGraph(this, Base);
+        initializeEmptyObject(Base->VerticesCount());
+        copyGraph(Base);
     }
 
     void AddVertex(void)
@@ -193,14 +212,14 @@ class CArcGraph: public GraphBase {
 private:
     vector < pair <int, int> > graph, graphT;
 public:
-    CArcGraph(int size) {
-        this -> number = size;
+    CArcGraph(int size)
+    {
+        initializeEmptyObject(size);
     }
     CArcGraph(IGraph *Base)
     {
-        // *this - очень важное место, так как без него объект, созданный в CListGraph удаляется(потрачено много времени на дебаг)
-        *this = CArcGraph(Base->VerticesCount());
-        copyGraph(this, Base);
+        initializeEmptyObject(size);
+        copyGraph(Base);
     }
 
     void AddVertex(void)
@@ -266,6 +285,11 @@ public:
             vertices.push_back(graphT[start].second);
             start++;
         }
+    }
+private:
+    void initializeEmptyObject(int size)
+    {
+        this -> number = size;
     }
 };
 // конец множества
