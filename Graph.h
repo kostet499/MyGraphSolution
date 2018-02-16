@@ -218,7 +218,7 @@ public:
     }
     CArcGraph(IGraph *Base)
     {
-        initializeEmptyObject(size);
+        initializeEmptyObject(Base->VerticesCount());
         copyGraph(Base);
     }
 
